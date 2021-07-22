@@ -1,0 +1,3 @@
+include ':ndk'
+include ':app'
+rootProject.name = "NdkRepository"
