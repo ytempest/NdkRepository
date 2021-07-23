@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:paddingHorizontal="100dp">
+
+    <Button
+        android:id="@+id/file_encrypt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="加密文件" />
+
+    <Button
+        android:id="@+id/file_decrypt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="解密文件" />
+
+    <Button
+        android:id="@+id/file_clear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="清除" />
+</LinearLayout>
