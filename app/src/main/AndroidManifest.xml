@@ -21,6 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".FileEncryptActivity" />
+        <activity android:name=".CompressImgActivity" />
     </application>
 
 </manifest>

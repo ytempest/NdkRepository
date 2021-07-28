@@ -6,23 +6,46 @@
 # cmake 最低版本需求
 cmake_minimum_required(VERSION 3.4.1)
 
-# Creates and names a library, sets it as either STATIC
-# or SHARED, and provides the relative paths to its source code.
-# You can define multiple libraries, and CMake builds them for you.
-# Gradle automatically packages shared libraries with your APK.
+# 添加-fPIC编译选项
+#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
+#
+# Enable C++11编译
+#set(CMAKE_CXX_STANDARD 11)
+#set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
+
+
+# 查找已有的so
+# 参数1：给查找到的so命名
+# 参数2：待查找的so名
+find_library(
+        log-lib
+        log
+)
+
+# --------- ndk_tools ---------
+message(STATUS "start build ndk_tools.so")
 
 # 编译生成新的so
 # 参数1：so名称
 # 参数2：so库类型
 # 参数3：so编译的源文件
-add_library( # Sets the name of the library.
+add_library(
         ndk_tools
-
-        # Sets the library as a shared library.
         SHARED
+        ndk_tools.cpp
+)
 
-        # Provides a relative path to your source file(s).
-        ndk_tools.cpp)
+# 为编译的so添加其他so依赖
+# 参数1：编译的so名
+# 参数2：依赖的so名
+target_link_libraries(
+        ndk_tools
+        ${log-lib}
+)
+
+# --------- file_encrypt ---------
+message(STATUS "start build file_encrypt.so")
 
 add_library(
         file_encrypt
@@ -30,32 +53,31 @@ add_library(
         file_encrypt.cpp
 )
 
-target_link_libraries( # Specifies the target library.
+target_link_libraries(
         file_encrypt
+        ${log-lib}
+)
 
-        # 生成so需要依赖的其他so库名
-        ${log-lib})
+# --------- image compress ---------
+message(STATUS "start build compress-image.so")
 
-# Searches for a specified prebuilt library and stores the path as a
-# variable. Because CMake includes system libraries in the search path by
-# default, you only need to specify the name of the public NDK library
-# you want to add. CMake verifies that the library exists before
-# completing its build.
+# 引入指定目录下的源文件
+include_directories(${PROJECT_SOURCE_DIR}/image)
+# 加载指定目录下所有so，若有一个libmath.so，那么在target_link_libraries方法中，直接使用math名称即可代表为libmath.so
+link_directories(${PROJECT_SOURCE_DIR}/../jniLibs/${ANDROID_ABI})
 
-# 查找已有的so
-find_library( # Sets the name of the path variable.
-        log-lib
+add_library(
+        compress-img
+        SHARED
+        ${PROJECT_SOURCE_DIR}/image/compress_img.cpp
+)
 
-        # Specifies the name of the NDK library that
-        # you want CMake to locate.
-        log)
+target_link_libraries(
+        compress-img
 
-# Specifies libraries CMake should link to your target library. You
-# can link multiple libraries, such as libraries you define in this
-# build script, prebuilt third-party libraries, or system libraries.
+        turbojpeg
+        jpeg
 
-target_link_libraries( # Specifies the target library.
-        ndk_tools
-
-        # 生成so需要依赖的其他so库名
-        ${log-lib})
+        jnigraphics
+        ${log-lib}
+)

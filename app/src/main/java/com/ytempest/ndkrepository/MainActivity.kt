@@ -10,6 +10,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        startActivity(Intent(this, FileEncryptActivity::class.java))
+        startActivity(Intent(this, CompressImgActivity::class.java))
     }
 }
